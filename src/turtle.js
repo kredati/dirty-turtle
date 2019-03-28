@@ -1,5 +1,4 @@
 const v = require('./vector')
-const l = require('./lambda')
 const triangle = require('./directional-triangle')
 
 // api functions & object
@@ -24,15 +23,17 @@ const right = (state, amount) => {
 
 const left = (state, amount) => right(state, amount * -1)
 
-const set_position = (state, position) => ({...state, position})
-
-const set_heading = (state, heading) => ({...state, heading})
-
 const show = state => ({...state, show: true})
 
 const hide = state => ({...state, show: false})
 
-const api = {forward, back, right, left, set_position, set_heading, show, hide}
+const set_position = (state, position) => ({...state, position})
+
+const set_heading = (state, heading) => ({...state, heading})
+
+const home = (state) => state.home
+
+const api = {forward, back, right, left, set_position, set_heading, show, hide, home}
 
 // default initial position
 const init = () => ({
@@ -42,7 +43,13 @@ const init = () => ({
 })
 
 // module functions
-const create = (options) => ({...init(), ...options})
+const create = (options) => {
+  let state = init()
+  state = {...state, ...options}
+  state.home = {...state}
+
+  return state
+}
 
 const update = (state, [command, arg] = []) => command in api ? api[command](state, arg) : state
 

@@ -1,9 +1,9 @@
-const init = (recursion_limit = 1000) => {  
+const init = (recursion_limit = 500) => {  
 
   Function.prototype.recursion_limit = recursion_limit
 
   Function.prototype.recur = function(...args) {
-    this.recursion_count = 0
+    if (this.recursion_count === undefined) this.recursion_count = 0
 
     if (this.recursion_count > this.recursion_limit) {
       console.warn(`Too much recursion in ${this.name || 'anonymous function'}.`)

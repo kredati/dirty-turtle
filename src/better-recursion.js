@@ -15,7 +15,6 @@ const init = (recursion_limit = 500) => {
     const result = this.apply(this, args)
     this.recursion_count = undefined
     return result
-
   }
   
   const recursion_symbol = Symbol("Recursion symbol.")

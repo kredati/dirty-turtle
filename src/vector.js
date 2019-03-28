@@ -1,6 +1,6 @@
 const {cos, sin, atan2, hypot} = Math
 
-const round = x => Number(x.toFixed(5))
+const round = (x, precision = 5) => Number(x.toFixed(precision))
 
 const to_degrees = radians => round(radians * 180 / Math.PI)
 

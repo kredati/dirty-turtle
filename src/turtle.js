@@ -16,7 +16,7 @@ const back = (state, amount) => forward(state, amount * -1)
 const right = (state, amount) => {
   let {heading} = state
 
-  heading = (360 + (heading + (amount % 360))) % 360
+  heading = v.round((360 + (heading + (amount % 360))) % 360, 3)
 
   return {...state, heading}
 }

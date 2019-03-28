@@ -11,7 +11,6 @@ let sketch = p => {
   window.world = world
 
   p.setup = () => {
-    console.log('Hello, world!')
     p.createCanvas(world.size.x, world.size.y)
   }
 
@@ -24,3 +23,4 @@ let sketch = p => {
 let myp5 = new p5(sketch)
 
 console.clear()
+console.log('Hello, world! I am turtle, make me draw.')

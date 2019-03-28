@@ -80,7 +80,24 @@ const erase = ({turtle}) => {
 
 const clearscreen = (walker) => home(erase(walker))
 
-const api = {forward, back, left, right, color, show, hide, pen_up, pen_down, home, erase, clearscreen}
+const set_position = (state, position) => {
+  state = pen_up(state)
+  state.turtle = t.api.set_position(state.turtle, position)
+  state = pen_down(state)
+
+  return state
+}
+
+const set_heading = ({turtle, path}, heading) => {
+  turtle = t.api.set_heading(turtle, heading)
+
+  return {turtle, path}
+}
+
+const api = {forward, back, left, right, color, show, hide, pen_up, pen_down, home, erase, clearscreen,
+  fd: forward, bk: back, lt: left, rt: right, pu: pen_up, pd: pen_down, cs: clearscreen,
+  set_position, set_heading
+}
 
 const update = (walker, [action, value]) => action in api ? api[action](value) : walker
 

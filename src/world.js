@@ -2,6 +2,8 @@ const w = require('./walker')
 const v = require('./vector')
 const {append, last, but_last} = require('./array')
 
+const vocabulary = require('./test_functions')
+
 // helper functions
 const globalize = obj => {
   for (const key in obj) {
@@ -21,6 +23,18 @@ const loop = (times, fn) => range(times).forEach(time => fn(time))
 const reset = () => create(world.draw)
 
 const print = x => console.log(x)
+
+const position = () => world.walker.turtle.position
+
+const heading = () => world.walker.turtle.heading
+
+const current_color = () => world.walker.path.current_color
+
+const report = () => ({
+  position: position(),
+  heading: heading(),
+  color: current_color()
+})
 
 const undo = Function.tco((count = 1) => {
   if (count === 0) return world
@@ -52,20 +66,42 @@ const redo = Function.tco((count = 1) => {
   return redo(count - 1)
 })
 
-const helpers = {range, repeat, loop, reset, undo, redo, print}
+const background = color => {
+  world.background = color
+}
+
+const helpers = {
+  range, 
+  repeat, 
+  loop, 
+  reset, 
+  undo, 
+  redo, 
+  print, 
+  background, bg: background,
+  position,
+  heading,
+  current_color,
+  report
+}
+
+const modules = {...vocabulary, vector: v}
 
 const world = {
   //fixed attributes
-  size: v.create(800, 600),
-  background: [0, 0, 0, 255]
+  size: v.create(800, 600)
 }
 
 const create = (draw) => {
+  console.clear()
+  console.log('Hello world! I am turtle, make me draw.')
+
   //context-sensitive attributes
   world.draw = draw
 
   //variable attributes
   world.walker = w.create(world)
+  world.background = [0, 0, 0, 255]
   world.stack = []
   world.redo = []
 
@@ -74,14 +110,15 @@ const create = (draw) => {
   for (const action in w.api) {
     api[action] = (...args) => {
       world.redo = []
-      world.walker = w.api[action](world.walker, args)
+      world.walker = w.api[action](world.walker, ...args)
 
       return world
     }
   }
 
   world.api = api
-  globalize({...api, ...helpers})
+  
+  globalize({...api, ...helpers, ...modules})
 
   return world
 }

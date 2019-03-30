@@ -23,8 +23,8 @@ const init = (recursion_limit = 500) => {
     result != null && 
     typeof result === 'object' &&
     recursion_symbol in result
-  
-  Function.tco = f => {
+
+  Function.tco = (f, name) => {
     f.recur = (...args) => ({recur: recursion_symbol, args})
 
     const call = (...args) => {
@@ -45,7 +45,7 @@ const init = (recursion_limit = 500) => {
     }
 
     return Object.defineProperty(call, 'name', {
-      value: f.name,
+      value: f.name ? f.name : name,
       enumerable: false
     })
   }

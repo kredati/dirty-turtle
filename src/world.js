@@ -34,7 +34,7 @@ const repeat = (times, fn) => {
   range(times).forEach(time => fn(time))
 
   const msg = fn.name || fn
-  return ok(repeat, [times, msg])
+  return ok(repeat, times, msg)
 }
 
 const loop = (times, fn, first) => {
@@ -91,7 +91,7 @@ const undo = Function.tco((count = 1) => {
   world.walker = last(world.stack)
 
   return undo(count - 1)
-})
+}, 'undo')
 
 const redo = Function.tco((count = 1) => {
   count = conform(Number, count, `Argument to redo must be a number. You gave me a(n) ${typeof count}: ${count}.`)
@@ -108,7 +108,7 @@ const redo = Function.tco((count = 1) => {
   world.walker = last(world.stack)
 
   return redo(count - 1)
-})
+}, 'redo')
 
 const background = color => {
   color = Color.conform(color)
@@ -137,10 +137,19 @@ const helpers = {
   hard_reset
 }
 
-const start_quickdraw = () => quickdraw.api.start()
-const stop_quickdraw = () => quickdraw.api.stop()
+const start_quickdraw = () => {
+  quickdraw.api.start()
+  return ok(start_quickdraw)
+}
+const stop_quickdraw = () => {
+  quickdraw.api.stop()
+  return ok(stop_quickdraw)
+}
 
-const start_shoot = (size) => shoot.api.start(size)
+const start_shoot = (size) => {
+  shoot.api.start(size)
+  return ok(start_shoot, size)
+}
 const stop_shoot = () => shoot.api.stop()
 const new_shot = () => shoot.api.renew_shot(world)
 
@@ -153,8 +162,16 @@ const world = {
   size: v.create(800, 600)
 }
 
-const ok = (action, args = []) => Object.defineProperty(ok, 'toString', 
-  {value: () => `Ok: ${action.name ? action.name : action}(${args.join(', ')})`, writable: true})
+const ok = (action, ...args) => {
+  const action_name = action.name ? action.name : action
+  Object.defineProperties(ok, {
+    toString: {value: 
+      () => `Ok: ${action_name}(${args.join(', ')})`, writable: true},
+    name: {value: 'ok', writable: true},
+    msg: {value: [action_name, ...args], writable: true}
+  })
+  return ok
+}
 
 const create = (draw) => {
   console.log('Hello world! I am turtle, make me draw.')
@@ -175,7 +192,7 @@ const create = (draw) => {
       world.redo = []
       world.walker = w.api[action](world.walker, ...args)
 
-      return ok(action, args)
+      return ok(action, ...args)
     }
   }
 

@@ -106,7 +106,7 @@ const erase = ({turtle, path}) => {
   return {turtle, path}
 }
 
-const clear_screen = (walker) => home(erase(walker))
+const clear_screen = (walker) => erase(home(walker))
 
 const set_position = (state, position) => {
   position = Vector.conform(position, `The turtle's position must be a vector.`)

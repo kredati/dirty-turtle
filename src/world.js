@@ -5,6 +5,7 @@ const {append, last, but_last} = require('./array')
 const Types = require('./types')
 const {conform} = Types
 const Color = require('./color')
+const {colors} = Color
 window.conform = conform
 
 const vocabulary = require('./arcs')
@@ -27,14 +28,14 @@ const repeat = (times, fn) => {
   times = conform(Number, times, `First argument to repeat must be a number. You gave me a(n) ${typeof times}: ${times}.`)
   fn = conform(Function, fn, `Second argument to repeat must be a function. You gave me a(n) ${typeof fn}: ${fn}.`)
 
-  return range(times).forEach(_ => fn())
+  return range(times).forEach(time => fn(time))
 }
 
-const loop = (times, fn) => {
+const loop = (times, fn, first) => {
   times = conform(Number, times, `First argument to loop must be a number. You gave me a(n) ${typeof times}: ${times}.`)
   fn = conform(Function, fn, `Second argument to loop must be a function. You gave me a(n) ${typeof times}: ${fn}.`)
 
-  return range(times).forEach(time => fn(time))
+  return range(times).reduce((acc, time) => fn(acc, time), first)
 }
 
 const reset = () => create(world.draw)
@@ -47,11 +48,20 @@ const heading = () => world.walker.turtle.heading
 
 const current_color = () => world.walker.path.current_color
 
-const report = () => ({
+const state = () => ({
   position: position(),
   heading: heading(),
   color: current_color()
 })
+
+const report = () => {
+  const {x, y} = position()
+  let color = current_color()
+  let named_color = Object.entries(colors)
+    .filter(([_, value]) => value === color)
+    .reduce((_, [name]) => name, '')
+  print(`Position: (${x}, ${y}). Heading: ${heading()}. Color: ${named_color || color}.`)
+}
 
 const undo = Function.tco((count = 1) => {
   count = conform(Number, count, `Argument to undo must be a number. You gave me a(n) ${typeof count}: ${count}.`)
@@ -141,7 +151,7 @@ const create = (draw) => {
 
   world.api = api
   
-  globalize({...api, ...helpers, ...modules})
+  globalize({...api, ...helpers, ...modules, colors, ...colors})
 
   const help = require('./docs')
 

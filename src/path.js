@@ -1,10 +1,11 @@
 const segment = require('./segment')
+const Color = require('./color')
 
 const create = () => ({
   past_segments: [],
   current_segment: segment.create(),
   pen_down: true,
-  current_color: [255, 255, 255, 255]
+  current_color: Color.colors.white
 })
 
 const api = {

@@ -31,7 +31,7 @@ const magnitude = ({x, y}) => round(hypot(x, y))
 const equal = (v1, v2) => v1.x === v2.x && v1.y === v2.y
 
 const conform_to_vector = (v, msg) => {
-  v = conform(Record, v, `${msg ? msg + ' ' : ''}A vector must be a record. You gave me ${x}.`)
+  v = conform(Record, v, `${msg ? msg + ' ' : ''}A vector must be a record. You gave me ${v}.`)
 
   let {x, y} = v
   x = conform(Number, x, `${msg ? msg + ' ' : ''}A vector must have a number for its x-value. You gave me ${x}.`)

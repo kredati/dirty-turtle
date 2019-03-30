@@ -2,27 +2,44 @@ const w = require('./walker')
 const v = require('./vector')
 const {append, last, but_last} = require('./array')
 
-const vocabulary = require('./test_functions')
+const Types = require('./types')
+const {conform} = Types
+const Color = require('./color')
+window.conform = conform
+
+const vocabulary = require('./arcs')
 
 // helper functions
 const globalize = obj => {
-  for (const key in obj) {
-    window[key] = obj[key]
-  }
+  Object.keys(obj).forEach(key => { window[key] = obj[key] })
 
   return obj
 }
 
 // user-facing dsl/helper functions
-const range = size => [...Array(size)].map((_, i) => i)
+const range = size => {
+  size = conform(Number, size, `Argument to range must be a number. You gave me a(n) ${typeof size}: ${size}.`)
+  
+  return [...Array(size)].map((_, i) => i)
+}
 
-const repeat = (times, fn) => range(times).forEach(_ => fn())
+const repeat = (times, fn) => {
+  times = conform(Number, times, `First argument to repeat must be a number. You gave me a(n) ${typeof times}: ${times}.`)
+  fn = conform(Function, fn, `Second argument to repeat must be a function. You gave me a(n) ${typeof fn}: ${fn}.`)
 
-const loop = (times, fn) => range(times).forEach(time => fn(time))
+  return range(times).forEach(_ => fn())
+}
+
+const loop = (times, fn) => {
+  times = conform(Number, times, `First argument to loop must be a number. You gave me a(n) ${typeof times}: ${times}.`)
+  fn = conform(Function, fn, `Second argument to loop must be a function. You gave me a(n) ${typeof times}: ${fn}.`)
+
+  return range(times).forEach(time => fn(time))
+}
 
 const reset = () => create(world.draw)
 
-const print = x => console.log(x)
+const print = x => (console.log(x), x)
 
 const position = () => world.walker.turtle.position
 
@@ -37,6 +54,8 @@ const report = () => ({
 })
 
 const undo = Function.tco((count = 1) => {
+  count = conform(Number, count, `Argument to undo must be a number. You gave me a(n) ${typeof count}: ${count}.`)
+  
   if (count === 0) return world
 
   if (world.stack.length <= 1) {
@@ -52,6 +71,8 @@ const undo = Function.tco((count = 1) => {
 })
 
 const redo = Function.tco((count = 1) => {
+  count = conform(Number, count, `Argument to redo must be a number. You gave me a(n) ${typeof count}: ${count}.`)
+
   if (count === 0) return world
 
   if (world.redo.length === 0) {
@@ -67,6 +88,8 @@ const redo = Function.tco((count = 1) => {
 })
 
 const background = color => {
+  color = Color.conform(color)
+
   world.background = color
 }
 
@@ -119,6 +142,10 @@ const create = (draw) => {
   world.api = api
   
   globalize({...api, ...helpers, ...modules})
+
+  const help = require('./docs')
+
+  globalize(help)
 
   return world
 }

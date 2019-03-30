@@ -15,4 +15,11 @@ const assert = (fn, msg) => {
   throw Error(msg)
 }
 
-module.exports = assert
+const conform = (fn, value, msg = `Value ${value} did not conform to predicate ${fn.name}`) => {
+  if (typeof fn !== 'function') throw Error('First argument to conform must be a function.')
+  if (typeof msg !== 'string') throw Error('Third argument to conform must be a string.')
+
+  return assert(() => fn(value), msg) ? value : void null
+}
+
+module.exports = {assert, conform}

@@ -31,7 +31,7 @@ const set_position = (state, position) => ({...state, position})
 
 const set_heading = (state, heading) => ({...state, heading})
 
-const home = (state) => state.home
+const home = (state) => ({...state, ...state.home})
 
 const api = {forward, back, right, left, set_position, set_heading, show, hide, home}
 

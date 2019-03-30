@@ -1,79 +1,105 @@
-const t = require('./turtle')
-const p = require('./path')
-const v = require('./vector')
+const Turtle = require('./turtle')
+const Path = require('./path')
+const Vector = require('./vector')
+
+const {conform} = require('./types')
+const Color = require('./color')
 
 const create = (world) => {
-  const turtle = t.create({position: v.scale(0.5, world.size)})
-  const path = p.api.add_point(p.create(), turtle.position)
+  const turtle = Turtle.create({position: Vector.scale(0.5, world.size)})
+  const path = Path.api.add_point(Path.create(), turtle.position)
 
   return {turtle, path}
 }
 
 const forward = ({turtle, path}, distance) => {
-  turtle = t.api.forward(turtle, distance)
-  path = p.api.add_point(path, turtle.position)
+  distance = conform(Number, distance, 
+    `You must tell the turtle how far to walk forward by giving it a number.
+      You gave it a(n) ${typeof distance}. 
+      You told it to walk forward ${distance}.`)
+
+  turtle = Turtle.api.forward(turtle, distance)
+  path = Path.api.add_point(path, turtle.position)
 
   return {turtle, path}
 }
 
 const back = ({turtle, path}, distance) => {
-  turtle = t.api.back(turtle, distance)
-  path = p.api.add_point(path, turtle.position)
+  distance = conform(Number, distance, 
+    `You must tell the turtle how far to walk backwards by giving it a number. 
+      You gave it a(n) ${typeof distance}. 
+      You told it to walk forward by ${distance} steps.`)
+
+  turtle = Turtle.api.back(turtle, distance)
+  path = Path.api.add_point(path, turtle.position)
 
   return {turtle, path}
 }
 
 const left = ({turtle, path}, amount) => {
-  turtle = t.api.left(turtle, amount)
+  amount = conform(Number, amount,
+    `You must tell the turtle how far to turn left by giving it a number.
+      You gave it a(n) ${typeof amount}. 
+      You told it turn left by ${amount} degrees.`)
+
+  turtle = Turtle.api.left(turtle, amount)
 
   return {turtle, path}
 }
 
 const right = ({turtle, path}, amount) => {
-  turtle = t.api.right(turtle, amount)
+  amount = conform(Number, amount,
+    `You must tell the turtle how far to turn right by giving it a number.
+      You gave it a(n) ${typeof amount}. 
+      You told it turn left by ${amount} degrees.`)
+
+  turtle = Turtle.api.right(turtle, amount)
 
   return {turtle, path}
 }
 
 const color = ({turtle, path}, new_color) => {
-  path = p.api.set_color(path, new_color)
+  new_color = Color.conform(new_color)
+
+  path = Path.api.set_color(path, new_color)
 
   return {turtle, path}
 }
 
 const show = ({turtle, path}) => {
-  turtle = t.api.show(turtle)
+  turtle = Turtle.api.show(turtle)
 
   return {turtle, path}
 }
 
 const hide = ({turtle, path}) => {
-  turtle = t.api.hide(turtle)
+  turtle = Turtle.api.hide(turtle)
 
   return {turtle, path}
 }
 
 const pen_up = ({turtle, path}) => {
-  path = p.api.pen_up(path)
+  path = Path.api.pen_up(path)
 
   return {turtle, path}
 }
 
 const pen_down = ({turtle, path}) => {
-  path = p.api.pen_down(path)
-  path = p.api.add_point(path, turtle.position)
+  path = Path.api.pen_down(path)
+  path = Path.api.add_point(path, turtle.position)
 
   return {turtle, path}
 }
 
 const home = ({turtle, path}) => {
-  turtle = t.api.home(turtle)
+  turtle = Turtle.api.home(turtle)
+  path = Path.api.add_point(path, turtle.position)
 
   return {turtle, path}
 }
 
-const erase = ({turtle}) => {
-  path = p.api.add_point(p.create(), turtle.position)
+const erase = ({turtle, path}) => {
+  path = Path.api.add_point(Path.create(), turtle.position)
 
   return {turtle, path}
 }
@@ -81,15 +107,20 @@ const erase = ({turtle}) => {
 const clearscreen = (walker) => home(erase(walker))
 
 const set_position = (state, position) => {
+  position = Vector.conform(position, `The turtle's position must be a vector.`)
+
   state = pen_up(state)
-  state.turtle = t.api.set_position(state.turtle, position)
+  state.turtle = Turtle.api.set_position(state.turtle, position)
   state = pen_down(state)
 
   return state
 }
 
 const set_heading = ({turtle, path}, heading) => {
-  turtle = t.api.set_heading(turtle, heading)
+  heading = conform(Number, heading, 
+    `The turtle's heading must be a number. You gave me a(n) ${typeof heading}: ${heading}.`)
+
+  turtle = Turtle.api.set_heading(turtle, heading)
 
   return {turtle, path}
 }
@@ -102,8 +133,8 @@ const api = {forward, back, left, right, color, show, hide, pen_up, pen_down, ho
 const update = (walker, [action, value]) => action in api ? api[action](value) : walker
 
 const render = (world, {turtle, path}) => {
-  t.render(world, turtle)
-  p.render(world, path)
+  Turtle.render(world, turtle)
+  Path.render(world, path)
 }
 
 module.exports = {create, api, update, render}

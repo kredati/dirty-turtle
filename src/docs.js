@@ -230,7 +230,17 @@ const redo = {
   category: 'drawing'
 }
 
-const drawing_functions = {erase, clear_screen, background, undo, redo}
+const reset = {
+  name: 'reset',
+  arguments: [],
+  description: `Resets the world to its original state.
+  Mostly equivalent to: cs(); background(black); color(white).
+  In addition, it deletes the undo history.`,
+  example: {code: 'reset()', comment: 'Resets the the world.'},
+  category: 'drawing'
+}
+
+const drawing_functions = {erase, clear_screen, background, undo, redo, reset}
 
 const Information = Symbol('Category: information')
 

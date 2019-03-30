@@ -31,7 +31,8 @@ const colors = {
   cyan: color(0, 255, 255),
   lavender: color(217, 160, 255),
   olive: color(87, 91, 20),
-  gold: color(193, 168, 7)
+  gold: color(193, 168, 7),
+  black: color(0, 0, 0)
 }
 
 module.exports = {color, conform: conform_to_color, colors}

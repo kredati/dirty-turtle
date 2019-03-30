@@ -31,7 +31,10 @@ const repeat = (times, fn) => {
   times = conform(Number, times, `First argument to repeat must be a number. You gave me a(n) ${typeof times}: ${times}.`)
   fn = conform(Function, fn, `Second argument to repeat must be a function. You gave me a(n) ${typeof fn}: ${fn}.`)
 
-  return range(times).forEach(time => fn(time))
+  range(times).forEach(time => fn(time))
+
+  const msg = fn.name || fn
+  return ok(repeat, [times, msg])
 }
 
 const loop = (times, fn, first) => {
@@ -45,6 +48,7 @@ const reset = () => {
   stop_quickdraw()
   stop_shoot()
   create(world.draw)
+  return ok(reset)
 }
 
 const print = x => (console.log(x), x)
@@ -68,16 +72,18 @@ const report = () => {
     .filter(([_, value]) => value === color)
     .reduce((_, [name]) => name, '')
   print(`Position: (${x}, ${y}). Heading: ${heading()}. Color: ${named_color || color}.`)
+
+  return ok(report)
 }
 
 const undo = Function.tco((count = 1) => {
   count = conform(Number, count, `Argument to undo must be a number. You gave me a(n) ${typeof count}: ${count}.`)
   
-  if (count === 0) return world
+  if (count === 0) return ok(undo)
 
   if (world.stack.length <= 1) {
     console.warn('Nothing to undo.')
-    return world
+    return ok(undo)
   }
 
   world.redo = append(world.redo, last(world.stack))
@@ -90,11 +96,11 @@ const undo = Function.tco((count = 1) => {
 const redo = Function.tco((count = 1) => {
   count = conform(Number, count, `Argument to redo must be a number. You gave me a(n) ${typeof count}: ${count}.`)
 
-  if (count === 0) return world
+  if (count === 0) return ok(redo)
 
   if (world.redo.length === 0) {
     console.warn('Nothing to redo.')
-    return world
+    return ok(redo)
   }
 
   world.stack = append(world.stack, last(world.redo))
@@ -108,6 +114,8 @@ const background = color => {
   color = Color.conform(color)
 
   world.background = color
+
+  return ok(background, color)
 }
 
 const hard_reset = () => window.location.reload()
@@ -145,6 +153,9 @@ const world = {
   size: v.create(800, 600)
 }
 
+const ok = (action, args = []) => Object.defineProperty(ok, 'toString', 
+  {value: () => `Ok: ${action.name ? action.name : action}(${args.join(', ')})`, writable: true})
+
 const create = (draw) => {
   console.log('Hello world! I am turtle, make me draw.')
 
@@ -164,7 +175,7 @@ const create = (draw) => {
       world.redo = []
       world.walker = w.api[action](world.walker, ...args)
 
-      return world
+      return ok(action, args)
     }
   }
 

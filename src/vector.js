@@ -14,6 +14,8 @@ const create = (x, y) => ({x: round(x), y: round(y)})
 
 const add = (v1, v2) => create(v1.x + v2.x, v1.y + v2.y)
 
+const sub = (v1, v2) => create(v1.x - v2.x, v1.y - v2.y)
+
 const from_heading = heading => create(cos(heading), sin(heading))
 
 const from_degrees = degrees => from_heading(to_radians(degrees))
@@ -27,6 +29,8 @@ const rotate = (angle, {x, y}) => create(x * cos(angle) - y * sin(angle), x * si
 const heading = ({x, y}) => round(atan2(y, x))
 
 const magnitude = ({x, y}) => round(hypot(x, y))
+
+const dist = (v1, v2) => magnitude(sub(v1, v2))
 
 const equal = (v1, v2) => v1.x === v2.x && v1.y === v2.y
 
@@ -42,11 +46,13 @@ const conform_to_vector = (v, msg) => {
 
 module.exports = {
   create, 
-  add, 
+  add,
+  sub,
   heading, 
   to_degrees, 
   to_radians, 
-  magnitude, 
+  magnitude,
+  dist,
   from_heading, 
   from_degrees,
   from_compass,

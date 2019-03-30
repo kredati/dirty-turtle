@@ -143,7 +143,6 @@ const world = {
 }
 
 const create = (draw) => {
-  //console.clear()
   console.log('Hello world! I am turtle, make me draw.')
 
   //context-sensitive attributes

@@ -92,6 +92,8 @@ const pen_down = ({turtle, path}) => {
 }
 
 const home = ({turtle, path}) => {
+  if (Vector.equal(turtle.position, turtle.home.position)) 
+    return {turtle, path}
   turtle = Turtle.api.home(turtle)
   path = Path.api.add_point(path, turtle.position)
 

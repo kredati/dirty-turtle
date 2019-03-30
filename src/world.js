@@ -110,6 +110,8 @@ const background = color => {
   world.background = color
 }
 
+const hard_reset = () => window.location.reload()
+
 const helpers = {
   range, 
   repeat, 
@@ -123,7 +125,8 @@ const helpers = {
   heading,
   current_color,
   state,
-  report
+  report,
+  hard_reset
 }
 
 const start_quickdraw = () => quickdraw.api.start()

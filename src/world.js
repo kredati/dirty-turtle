@@ -10,6 +10,9 @@ window.conform = conform
 
 const vocabulary = require('./arcs')
 
+const quickdraw = require('./quickdraw')
+const shoot = require('./shoot')
+
 // helper functions
 const globalize = obj => {
   Object.keys(obj).forEach(key => { window[key] = obj[key] })
@@ -38,7 +41,11 @@ const loop = (times, fn, first) => {
   return range(times).reduce((acc, time) => fn(acc, time), first)
 }
 
-const reset = () => create(world.draw)
+const reset = () => {
+  stop_quickdraw()
+  stop_shoot()
+  create(world.draw)
+}
 
 const print = x => (console.log(x), x)
 
@@ -115,8 +122,18 @@ const helpers = {
   position,
   heading,
   current_color,
+  state,
   report
 }
+
+const start_quickdraw = () => quickdraw.api.start()
+const stop_quickdraw = () => quickdraw.api.stop()
+
+const start_shoot = (size) => shoot.api.start(size)
+const stop_shoot = () => shoot.api.stop()
+const new_shot = () => shoot.api.renew_shot(world)
+
+const games = {start_quickdraw, stop_quickdraw, start_shoot, stop_shoot, new_shot,...shoot.levels}
 
 const modules = {...vocabulary, vector: v}
 
@@ -126,7 +143,7 @@ const world = {
 }
 
 const create = (draw) => {
-  console.clear()
+  //console.clear()
   console.log('Hello world! I am turtle, make me draw.')
 
   //context-sensitive attributes
@@ -134,7 +151,7 @@ const create = (draw) => {
 
   //variable attributes
   world.walker = w.create(world)
-  world.background = [0, 0, 0, 255]
+  world.background = colors.black
   world.stack = []
   world.redo = []
 
@@ -151,7 +168,13 @@ const create = (draw) => {
 
   world.api = api
   
-  globalize({...api, ...helpers, ...modules, colors, ...colors})
+  globalize({
+    ...api, 
+    ...helpers, 
+    ...modules, 
+    colors, ...colors,
+    ...games
+  })
 
   const help = require('./docs')
 
@@ -165,6 +188,9 @@ const render = () => {
     world.stack = [...world.stack, world.walker]
   world.draw.background(world.background)
   w.render(world, world.walker)
+  
+  quickdraw.render(world)
+  shoot.render(world)
 }
 
 module.exports = {create, render}

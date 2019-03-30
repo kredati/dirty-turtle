@@ -180,7 +180,7 @@ const turtle_functions = {
   home, pen_up, pen_down, show, hide, set_position, set_heading, color
 }
 
-const Drawing = Symbol('Category: drawing')
+const World = Symbol('Category: world')
 
 const erase = {
   name: 'erase',
@@ -188,7 +188,7 @@ const erase = {
   description: 'Erases the contents of the drawing. Does not affect the turtle.',
   example: {code: 'erase()', 
     comment: 'Erases the path while leaving the turtle where it is.'},
-  category: 'drawing'
+  category: 'world'
 }
 
 const clear_screen = {
@@ -198,7 +198,7 @@ const clear_screen = {
   description: 'Clears the screen and sets the turtle in its home location. Equivalent to home + erase.',
   example: {code: 'clear_screen()', 
     comment:'Clears the screen and sends the turtle home.'},
-  category: 'drawing'
+  category: 'world'
 }
 
 const background = {
@@ -208,7 +208,7 @@ const background = {
   description: 'Sets the background color for the drawing.',
   example: {code: 'background(dark_gray)',
     comment: 'Makes the background of the drawing dark gray.'},
-  category: 'drawing'
+  category: 'world'
 }
 
 const undo = {
@@ -217,7 +217,7 @@ const undo = {
   description: `Undoes the last set of instructions delivered to the turtle.
   The optional argument how many sets of instructions to undo. The default is 1.`,
   example: {code: 'undo(); undo(2)', comment: 'Undoes the last three actions.'},
-  category: 'drawing'
+  category: 'world'
 }
 
 const redo = {
@@ -227,20 +227,27 @@ const redo = {
   Giving new instructions to the turtle clears the redo cache.
   The optional argument how many sets of instructions to undo. The default is 1.`,
   example: {code: 'redo()', comment: 'Re-does the last undone action.'},
-  category: 'drawing'
+  category: 'world'
 }
 
 const reset = {
   name: 'reset',
   arguments: [],
-  description: `Resets the world to its original state.
+  description: `Resets the turtle world to its original state.
   Mostly equivalent to: cs(); background(black); color(white).
   In addition, it deletes the undo history.`,
   example: {code: 'reset()', comment: 'Resets the the world.'},
-  category: 'drawing'
+  category: 'world'
 }
 
-const drawing_functions = {erase, clear_screen, background, undo, redo, reset}
+const hard_reset = {
+  name: 'hard_reset',
+  arguments: [],
+  description: `Reloads the page to reset the turtle world but also the functions stored in memory. You lose all your work.`,
+  category: 'world'
+}
+
+const world_functions = {erase, clear_screen, background, undo, redo, reset, hard_reset}
 
 const Information = Symbol('Category: information')
 
@@ -250,7 +257,7 @@ const print = {
   description: 'Prints whatever argument you give it to the console.',
   example: {code: 'print("foo")',
     comment: 'Sends the string "foo" to the console.'},
-  cagetory: 'information'
+  category: 'information'
 }
 
 const heading = {
@@ -330,14 +337,14 @@ const All = Symbol('Category: everything')
 
 const all_functions = {
   ...turtle_functions, 
-  ...drawing_functions, 
+  ...world_functions, 
   ...information_functions,
   ...control_functions
 }
 
 const categories = {
   [Turtle]: 'Turtle', 
-  [Drawing]: 'Drawing', 
+  [World]: 'World', 
   [Information]: 'Information', 
   [Control]: 'Control',
   [All]: 'All'
@@ -345,10 +352,18 @@ const categories = {
 
 const category_lists = {
   [Turtle]: turtle_functions,
-  [Drawing]: drawing_functions,
+  [World]: world_functions,
   [Information]: information_functions,
   [Control]: control_functions,
   [All]: all_functions
+}
+
+const category_blurbs = {
+  [Turtle]: 'Functions that change the state of the turtle.',
+  [World]: 'Functions that change the state of the turtle\'s world.',
+  [Information]: 'Functions that report information about the state of the turtle and world.',
+  [Control]: 'Functions that manipulate control flow.',
+  [All]: 'All the functions in Dirty Turtle (almost).'
 }
 
 const format_optional_argument = arg => {
@@ -411,8 +426,10 @@ const list = (category = All) => {
   }
 
   functions = category_lists[category]
+  blurb = category_blurbs[category]
 
   console.log(`%cCategory: %c${categories[category]}`, 'color: gray', 'color: black; font-weight: bold')
+  console.log(blurb)
   console.log(Object.keys(category_lists[category]).join(', '))
   console.log('For more information on any of these functions, call help() on the function.')
 }
@@ -422,7 +439,7 @@ const help = fn => {
     console.warn(`To use help, call help on a function or category. 
     Below is a list of all categories and functions for which I have help entries.`)
     console.log(`%c***Categories:`, 'color: gray')
-    console.log(`%cTurtle, Drawing, Information, Control`, 'color: black')
+    console.log(`%cTurtle, World, Information, Control`, 'color: black')
     console.log('......................................')
     console.log('%c***Functions:', 'color: gray')
     list()
@@ -447,4 +464,4 @@ Object.defineProperty(help, 'toString', {value:
   Try typing "help()".`
 })
 
-module.exports = {help, list, All, Turtle, Information, Drawing, Control}
+module.exports = {help, list, All, Turtle, Information, World, Control}

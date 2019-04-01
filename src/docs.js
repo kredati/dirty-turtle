@@ -331,7 +331,26 @@ const loop = {
   category: 'control'
 }
 
-const control_functions = {repeat, loop}
+const cond = {
+  name: 'cond',
+  arguments: [{condition: Any}, {if_true: Function}, {if_false: Function}],
+  returns: Any,
+  description: `Executes one function or the other based on the value of the condition. if_true will be executed if the condition is truthy; if_false will be executed otherwise.`,
+  example: {
+    code: `silly_star = (angle) => {
+  forward(100)
+  right(angle)
+  cond(heading() === 0,
+    () => {},
+    () => { silly_star(angle) }
+  )
+}`,
+    comment: `Defines a silly_star function that keeps the turtle moving forward and turning right by the specified angle, until the heading reaches 0 (i.e. the star has been completed).`
+  },
+  category: 'control'
+}
+
+const control_functions = {repeat, loop, cond}
 
 const All = Symbol('Category: everything')
 

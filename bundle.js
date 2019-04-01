@@ -84699,7 +84699,20 @@ const arc_left = (radius, angle = 90) => {
   repeat(angle, () => { step(radius); left(1) })
 }
 
-module.exports = {circle_right, circle_left, arc_right, arc_left, cl: circle_left, cr: circle_right, al: arc_left, ar: arc_right}
+const silly_star = (angle, size = 100) => {
+  forward(size)
+  right(angle)
+  cond(heading() === 0,
+    () => {},
+    () => { silly_star(angle, size) }
+  )
+}
+
+const ngon = (sides, size = 100) => {
+  repeat(sides, () => { forward(size); right(360/sides) })
+}
+
+module.exports = {circle_right, circle_left, arc_right, arc_left, cl: circle_left, cr: circle_right, al: arc_left, ar: arc_right, silly_star, ngon}
 },{"./types.js":19}],7:[function(require,module,exports){
 const first = ([head]) => head
 

@@ -85210,7 +85210,26 @@ const loop = {
   category: 'control'
 }
 
-const control_functions = {repeat, loop}
+const cond = {
+  name: 'cond',
+  arguments: [{condition: Any}, {if_true: Function}, {if_false: Function}],
+  returns: Any,
+  description: `Executes one function or the other based on the value of the condition. if_true will be executed if the condition is truthy; if_false will be executed otherwise.`,
+  example: {
+    code: `silly_star = (angle) => {
+  forward(100)
+  right(angle)
+  cond(heading() === 0,
+    () => {},
+    () => { silly_star(angle) }
+  )
+}`,
+    comment: `Defines a silly_star function that keeps the turtle moving forward and turning right by the specified angle, until the heading reaches 0 (i.e. the star has been completed).`
+  },
+  category: 'control'
+}
+
+const control_functions = {repeat, loop, cond}
 
 const All = Symbol('Category: everything')
 
@@ -86054,6 +86073,13 @@ const loop = (times, fn, first) => {
   return range(times).reduce((acc, time) => fn(acc, time), first)
 }
 
+const cond = (bool, if_true, if_false) => {
+  if_true = conform(Function, if_true, `Second argument to cond must be a function. You gave me a(n) ${typeof if_true}: ${if_true}.`)
+  if_false = conform(Function, if_false, `Second argument to cond must be a function. You gave me a(n) ${typeof if_false}: ${if_false}.`)
+
+  return bool ? if_true() : if_false()
+}
+
 const reset = () => {
   stop_quickdraw()
   stop_shoot()
@@ -86144,7 +86170,8 @@ const helpers = {
   current_color,
   state,
   report,
-  hard_reset
+  hard_reset,
+  cond
 }
 
 const start_quickdraw = () => {

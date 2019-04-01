@@ -44,6 +44,13 @@ const loop = (times, fn, first) => {
   return range(times).reduce((acc, time) => fn(acc, time), first)
 }
 
+const cond = (bool, if_true, if_false) => {
+  if_true = conform(Function, if_true, `Second argument to cond must be a function. You gave me a(n) ${typeof if_true}: ${if_true}.`)
+  if_false = conform(Function, if_false, `Second argument to cond must be a function. You gave me a(n) ${typeof if_false}: ${if_false}.`)
+
+  return bool ? if_true() : if_false()
+}
+
 const reset = () => {
   stop_quickdraw()
   stop_shoot()
@@ -134,7 +141,8 @@ const helpers = {
   current_color,
   state,
   report,
-  hard_reset
+  hard_reset,
+  cond
 }
 
 const start_quickdraw = () => {

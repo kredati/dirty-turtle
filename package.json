@@ -1,6 +1,6 @@
 {
   "name": "dirty-turtle",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Quick and dirty turtle graphics",
   "main": "index.js",
   "scripts": {
@@ -8,6 +8,7 @@
     "test": "tap test/*.test.js",
     "build": "browserify -e index.js -o bundle.js"
   },
+  "type": "module",
   "keywords": [],
   "author": "Scott Richmond",
   "license": "MIT",

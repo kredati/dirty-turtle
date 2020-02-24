@@ -14,4 +14,4 @@ const is_integer = n => n % 1 === 0
 
 const not_zero = n => n !== 0
 
-module.exports = {round, mult, add, sub, div, is_real, is_integer, not_zero}
+export {round, mult, add, sub, div, is_real, is_integer, not_zero}

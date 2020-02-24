@@ -1,4 +1,4 @@
-const line = require('./line')
+import * as line from './line.js'
 
 const create = () => ({
   lines: []
@@ -31,4 +31,4 @@ const render = (world, segment) => {
   return segment
 }
 
-module.exports = {create, api, update, render}
+export {create, api, update, render}

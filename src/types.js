@@ -1,4 +1,4 @@
-const {assert, conform} = require('./assert')
+import {assert, conform} from './assert.js'
 
 const is_string = s => typeof s === 'string'
 
@@ -51,4 +51,4 @@ const predicates = {is_boolean, is_function, is_number, is_record, is_string, is
 
 const types = {String, Number, Function, Boolean, Record, Tuple}
 
-module.exports = {predicates, types, from_representative, conform: conform_to_type}
+export {predicates, types, from_representative, conform_to_type as conform}

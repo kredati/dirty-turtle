@@ -1,4 +1,4 @@
-const Types = require('./types')
+import * as Types from './types.js'
 
 const {conform, from_representative} = Types
 const {Record} = Types.types
@@ -19,4 +19,4 @@ const Interface = record => {
   }
 }
 
-module.exports = Interface
+export { Interface }

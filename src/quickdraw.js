@@ -56,4 +56,4 @@ const render = (world) => {
 
 }
 
-module.exports = {create, api, render}
+export {create, api, render}

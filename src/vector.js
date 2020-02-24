@@ -1,4 +1,5 @@
-const Types = require('./types')
+import * as Types from './types.js'
+
 const {conform} = Types
 const {Record} = Types.types
 
@@ -44,7 +45,7 @@ const conform_to_vector = (v, msg) => {
   return {x, y}
 }
 
-module.exports = {
+export {
   create, 
   add,
   sub,
@@ -60,5 +61,5 @@ module.exports = {
   rotate,
   round,
   equal,
-  conform: conform_to_vector
+  conform_to_vector as conform
 }

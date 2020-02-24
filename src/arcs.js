@@ -1,4 +1,5 @@
-const Types = require('./types.js')
+import * as Types from './types.js'
+
 const {conform} = Types
 
 const step = radius => forward(2 * Math.PI * radius / 360)
@@ -49,4 +50,4 @@ const arc_left = (radius, angle = 90) => {
   repeat(angle, () => { step(radius); left(1) })
 }
 
-module.exports = {circle_right, circle_left, arc_right, arc_left, cl: circle_left, cr: circle_right, al: arc_left, ar: arc_right}
+export {circle_right, circle_left, arc_right, arc_left, circle_left as cl, circle_right as cr, arc_left as al, arc_right as ar}

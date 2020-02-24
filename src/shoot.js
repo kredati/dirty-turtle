@@ -1,4 +1,4 @@
-const Vector = require('./vector')
+import * as Vector from './vector.js'
 
 let shooting = false
 let shooting_started = false
@@ -158,4 +158,6 @@ Try to hit the target with only one call to a move function.`)
   test_shot(world)
 }
 
-module.exports = {render, api: {start, stop, renew_shot}, levels}
+const api = {start, stop, renew_shot}
+
+export {render, api, levels}

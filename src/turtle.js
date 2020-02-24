@@ -1,5 +1,5 @@
-const v = require('./vector')
-const triangle = require('./directional-triangle')
+import * as v from './vector.js'
+import * as triangle from './directional-triangle.js'
 
 // api functions & object
 const forward = (state, amount) => {
@@ -64,4 +64,4 @@ const render = (world, state) => {
   return state
 }
 
-module.exports = {update, render, create, api}
+export {update, render, create, api}

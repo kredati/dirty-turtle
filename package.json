@@ -1,19 +1,19 @@
 {
   "name": "dirty-turtle",
-  "version": "0.0.1",
+  "version": "0.2.0",
   "description": "Quick and dirty turtle graphics",
-  "main": "index.js",
+  "repository": "https://github.com/kredati/dirty-turtle",
+  "main": "main.js",
   "scripts": {
-    "start": "budo index.js --live",
-    "test": "tap test/*.test.js",
-    "build": "browserify -e index.js -o bundle.js"
+    "start": "live-server",
+    "test": "tap test/*.test.js"
   },
+  "type": "module",
   "keywords": [],
   "author": "Scott Richmond",
   "license": "MIT",
   "dependencies": {
-    "budo": "^11.6.1",
-    "p5": "^0.7.3",
-    "tap": "^12.6.1"
+    "live-server": "^1.2.1",
+    "tap": "^14.10.6"
   }
 }

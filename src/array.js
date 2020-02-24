@@ -8,4 +8,4 @@ const but_last = arr => arr.slice(0, arr.length - 1)
 
 const append = (arr, el) => [...arr, el]
 
-module.exports = {first, but_first, last, but_last, append}
+export {first, but_first, last, but_last, append}

@@ -1,17 +1,15 @@
-const w = require('./walker')
-const v = require('./vector')
-const {append, last, but_last} = require('./array')
+import * as w from './walker.js'
+import * as v from './vector.js'
+import {append, last, but_last} from './array.js'
+import * as Types from './types.js'
+import * as Color from './color.js'
+import * as vocabulary from './arcs.js'
+import * as quickdraw from './quickdraw.js'
+import * as shoot from './shoot.js'
 
-const Types = require('./types')
 const {conform} = Types
-const Color = require('./color')
 const {colors} = Color
 window.conform = conform
-
-const vocabulary = require('./arcs')
-
-const quickdraw = require('./quickdraw')
-const shoot = require('./shoot')
 
 // helper functions
 const globalize = obj => {
@@ -214,9 +212,7 @@ const create = (draw) => {
     ...games
   })
 
-  const help = require('./docs')
-
-  globalize(help)
+  import('./docs.js').then(d => globalize(d))
 
   return world
 }
@@ -231,4 +227,4 @@ const render = () => {
   shoot.render(world)
 }
 
-module.exports = {create, render}
+export {create, render}

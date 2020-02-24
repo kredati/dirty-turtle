@@ -1,4 +1,4 @@
-const {round} = require('./numbers')
+import {round} from './numbers.js'
 
 const radians_to_degrees = radians => round(radians * 180 / Math.PI)
 
@@ -40,4 +40,4 @@ const radians = fns.reduce((obj, fn) => ({...obj, [fn.name]: fn(RADIANS)}), {})
 
 const degrees = fns.reduce((obj, fn) => ({...obj, [fn.name]: fn(DEGREES)}), {})
 
-module.exports = {degrees_to_radians, radians_to_degrees, radians, degrees}
+export {degrees_to_radians, radians_to_degrees, radians, degrees}

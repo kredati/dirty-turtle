@@ -10,7 +10,6 @@ Any.name = 'Any'
 const Record = {}
 Record.name = 'Record'
 
-
 const Turtle = Symbol('Category: turtle')
 
 const forward = {
@@ -37,7 +36,7 @@ const back = {
 
 const left = {
   name: 'left',
-  shortcut: 'bk',
+  shortcut: 'lt',
   arguments: [{degrees: Number}],
   description: 'Rotates the turtle left by the number of degrees passed as the argument.',
   example: {code: 'left(90)',
@@ -444,8 +443,8 @@ const list = (category = All) => {
     return
   }
 
-  functions = category_lists[category]
-  blurb = category_blurbs[category]
+  const functions = category_lists[category]
+  const blurb = category_blurbs[category]
 
   console.log(`%cCategory: %c${categories[category]}`, 'color: gray', 'color: black; font-weight: bold')
   console.log(blurb)
@@ -483,4 +482,4 @@ Object.defineProperty(help, 'toString', {value:
   Try typing "help()".`
 })
 
-module.exports = {help, list, All, Turtle, Information, World, Control}
+export {help, list, All, Turtle, Information, World, Control}

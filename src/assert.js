@@ -22,4 +22,4 @@ const conform = (fn, value, msg = `Value ${value} did not conform to predicate $
   return assert(() => fn(value), msg) ? value : void null
 }
 
-module.exports = {assert, conform}
+export {assert, conform}

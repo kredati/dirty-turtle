@@ -1,6 +1,7 @@
-const Types = require('./types')
+import * as Types from './types.js'
+import {assert} from './assert.js'
+
 const {conform} = Types
-const {assert} = require('./assert')
 
 const color = (r, g, b, a = 255) => [r, g, b, a]
 
@@ -35,4 +36,4 @@ const colors = {
   black: color(0, 0, 0)
 }
 
-module.exports = {color, conform: conform_to_color, colors}
+export {color, conform_to_color as conform, colors}

@@ -1,5 +1,5 @@
-const segment = require('./segment')
-const Color = require('./color')
+import * as segment from './segment.js'
+import * as Color from './color.js'
 
 const create = () => ({
   past_segments: [],
@@ -50,4 +50,4 @@ const render = (world, path) => {
   return path
 }
 
-module.exports = {create, api, update, render}
+export {create, api, update, render}

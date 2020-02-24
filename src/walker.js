@@ -1,9 +1,8 @@
-const Turtle = require('./turtle')
-const Path = require('./path')
-const Vector = require('./vector')
-
-const {conform} = require('./types')
-const Color = require('./color')
+import * as Turtle from './turtle.js'
+import * as Path from './path.js'
+import * as Vector from './vector.js'
+import {conform} from './types.js'
+import * as Color from './color.js'
 
 const create = (world) => {
   const turtle = Turtle.create({position: Vector.scale(0.5, world.size)})
@@ -139,4 +138,4 @@ const render = (world, {turtle, path}) => {
   Path.render(world, path)
 }
 
-module.exports = {create, api, update, render}
+export {create, api, update, render}

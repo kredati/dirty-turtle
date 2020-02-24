@@ -1,4 +1,4 @@
-const v = require('./vector')
+import * as v from './vector.js'
 
 const init = () => ({
   position: v.create(0, 0),
@@ -37,4 +37,4 @@ const render = (world, state) => {
   draw.pop()
 }
 
-module.exports = {create, render}
+export {create, render}

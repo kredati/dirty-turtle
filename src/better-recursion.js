@@ -1,54 +1,36 @@
-const init = (recursion_limit = 500) => {  
+Function.prototype.recursion_limit = 500
 
-  Function.prototype.recursion_limit = recursion_limit
-
-  Function.prototype.recur = function(...args) {
-    if (this.recursion_count === undefined) this.recursion_count = 0
-
-    if (this.recursion_count > this.recursion_limit) {
-      console.warn(`Too much recursion in ${this.name || 'anonymous function'}.`)
-      this.recursion_count = undefined
-      return void null
-    }
-
-    this.recursion_count++
-    const result = this.apply(this, args)
-    this.recursion_count = undefined
-    return result
-  }
-  
-  const recursion_symbol = Symbol("Recursion symbol.")
-
-  const is_recursive_call = result => 
+const is_recursive_call = result => 
     result != null && 
     typeof result === 'object' &&
-    recursion_symbol in result
+    'dirty-turtle/recursion' in result
 
-  Function.tco = (f, name) => {
-    f.recur = (...args) => ({recur: recursion_symbol, args})
-
+Function.tco = (f, name = f.name || 'anonymous function') => {
     const call = (...args) => {
-      let result = f(...args)
-      
-      let recursion_count = 0
+        let result = f(...args)
+        
+        let recursion_count = 0
 
-      while (is_recursive_call(result)) {
-        if (recursion_count > f.recursion_limit) {
-          console.warn(`Too much recursion in ${f.name || 'anonymous function'}.`)
-          return void null
+        while (is_recursive_call(result)) {
+            if (recursion_count > call.recursion_limit) {
+                console.warn(`Too much recursion in ${name}.`)
+                return void null
+            }
+            recursion_count++
+            result = f(...result.args)
         }
-        recursion_count++
-        result = f(...result.args)
-      }
 
-      return result
+        return result
     }
 
-    return Object.defineProperty(call, 'name', {
-      value: f.name ? f.name : name,
-      enumerable: false
+    return Object.defineProperties(call, {
+        name: {
+            value: name,
+            enumerable: false
+            },
+        recur: {
+            value: (...args) => ({['dirty-turtle/recursion']: true, args}),
+            enumerable: false
+        }
     })
-  }
 }
-
-module.exports = {init}

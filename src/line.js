@@ -11,4 +11,4 @@ const render = (world, line) => {
   return line
 }
 
-module.exports = {create, render}
+export {create, render}
